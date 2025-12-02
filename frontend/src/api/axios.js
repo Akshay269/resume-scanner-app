@@ -9,7 +9,7 @@ export const useApi = () => {
   });
 
   api.interceptors.request.use(async (config) => {
-    const token = await getToken({ template: "default" });
+    const token = await getToken();
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   });

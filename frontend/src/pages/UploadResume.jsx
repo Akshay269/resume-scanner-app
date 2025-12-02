@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState,  } from "react";
 import { useApi } from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadResume() {
   const api = useApi();
+
+
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
@@ -11,8 +13,7 @@ export default function UploadResume() {
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(null);
 
-
-   const handleFileChange = (e) => {
+  const handleFileChange = (e) => {
     const f = e.target.files[0];
     setFile(f);
     setPreviewName(f ? f.name : "");
@@ -31,7 +32,6 @@ export default function UploadResume() {
 
       // redirect to multi-step form
       navigate("/form", { state: { prefill: res.data.prefilledData } });
-
     } catch (error) {
       console.error(error);
       alert("Error uploading resume. Please try again.");
@@ -45,7 +45,6 @@ export default function UploadResume() {
       <h1 className="text-3xl font-bold mb-6">Upload Your Resume</h1>
 
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-lg">
-
         {/* File Input */}
         <label className="block mb-3 font-medium">Choose Resume (PDF):</label>
         <input
@@ -75,10 +74,10 @@ export default function UploadResume() {
         {/* Show Parsed Resume Data */}
         {parsedData && (
           <div className="mt-6 bg-gray-100 rounded p-4">
-            <h2 className="text-lg font-semibold mb-2">Extracted Resume Data:</h2>
-            <pre className="text-sm">
-              {JSON.stringify(parsedData, null, 2)}
-            </pre>
+            <h2 className="text-lg font-semibold mb-2">
+              Extracted Resume Data:
+            </h2>
+            <pre className="text-sm">{JSON.stringify(parsedData, null, 2)}</pre>
           </div>
         )}
       </div>

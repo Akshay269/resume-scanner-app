@@ -19,14 +19,14 @@ app.use(cors());
 app.use(express.json());
 
 app.use(globalLimiter);
-app.use(morgan("combined"));
+// app.use(morgan("combined"));
 
-app.use(expressWinston.logger({
-  winstonInstance: logger,
-  meta: true,
-  expressFormat: true,
-  colorize: false
-}));
+// app.use(expressWinston.logger({
+//   winstonInstance: logger,
+//   meta: true,
+//   expressFormat: true,
+//   colorize: false
+// }));
 
 app.use(errorHandler);
 
