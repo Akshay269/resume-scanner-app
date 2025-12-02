@@ -1,63 +1,43 @@
 import Profile from "../models/Profile.js";
-import { parseResume } from "../utils/geminiResumeParser.js";
-// import PDFParser from "pdf2json";
-
-import { PDFParse } from "pdf-parse";
+import { parseResumePDF } from "../services/resumeVisionParser.service.js";
+import { normalizeResume } from "../services/resumeNormalizer.service.js";
 
 export const uploadResume = async (req, res) => {
   try {
-    // 1. Check for file buffer
-    if (!req.file || !req.file.buffer) {
-      return res.status(400).json({ error: "No file buffer provided." });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // Using pdf-parse to extract text from PDF buffer
-    const data = await PDFParse(req.file.buffer);
-    const extractedText = data.text;
-    console.log("Extracted Text:", extractedText);
+    const buffer = req.file.buffer;
 
-    // const pdfParser = new PDFParser();
-    // const fileBuffer = req.file.buffer; // 2. Convert event-based parser to a Promise for async/await
+    // Step 1 — Parse PDF via Gemini Vision
+    console.log("Parsing resume using Gemini Vision...");
+    const parsedData = await parseResumePDF(buffer);
 
-    // const pdfData = await new Promise((resolve, reject) => {
-    //   pdfParser.on("pdfParser_dataReady", (data) => {
-    //     resolve(data);
-    //   });
-    //   pdfParser.on("pdfParser_dataError", (errData) => {
-    //     // pdf2json wraps the error
-    //     reject(new Error(errData.parserError));
-    //   });
+    // Step 2 — Normalize
+    const normalized = normalizeResume(parsedData);
 
-    //   // Start parsing the buffer
-    //   pdfParser.parseBuffer(fileBuffer);
-    // });
+    // Step 3 — Save into database
+    const userId = req.user?.id || req.body.userId;
+    if (!userId) {
+      return res.status(400).json({ error: "userId is required" });
+    }
 
-    // console.log("PDF Data Extracted:", pdfData);
+    let profile = await Profile.findOne({ userId });
+    if (!profile) {
+      profile = new Profile({ userId });
+    }
 
-    // // 3. Extract text from the complex pdf2json output structure
-    // const extractedText = pdfData.formImage.Pages.map((page) =>
-    //   page.Texts.map((text) =>
-    //     text.R.map((r) => decodeURIComponent(r.T)).join("")
-    //   ).join(" ")
-    // ).join("\n");
+    profile.formData = normalized;
+    profile.updatedAt = new Date();
+    await profile.save();
 
-    //   const extracted = await parseResume(extractedText);
-
-    //   let profile = await Profile.findOne({ userId: req.user.id });
-
-    //   if (!profile) {
-    //     profile = await Profile.create({
-    //       userId: req.user.id,
-    //       prefilledData: extracted,
-    //     });
-    //   } else {
-    //     profile.prefilledData = extracted;
-    //     await profile.save();
-    //   }
-
-    //   res.json({ prefilledData: extracted });
+    res.json({
+      message: "Resume uploaded and parsed successfully.",
+      data: normalized,
+    });
   } catch (err) {
-    //   console.error("Resume Upload Error:", err);
-    //   res.status(500).json({ error: err.message });
+    console.error("Resume Upload Error:", err);
+    res.status(500).json({ error: err.message });
   }
 };

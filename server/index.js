@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+dotenv.config();
 import connectDB from "./src/config/db.js";
 import morgan from "morgan";
 import expressWinston from "express-winston";
@@ -11,7 +12,7 @@ import { globalLimiter } from "./src/middlewares/rateLimiter.simple.js";
 import { logger } from "./src/config/logger.js";
 import { errorHandler } from "./src/middlewares/errorHandler.js";
 
-dotenv.config();
+
 connectDB();
 
 const app = express();
@@ -28,7 +29,7 @@ app.use(globalLimiter);
 //   colorize: false
 // }));
 
-app.use(errorHandler);
+
 
 
 app.get("/", (req, res) => res.send("API Running"));
@@ -36,6 +37,8 @@ app.get("/", (req, res) => res.send("API Running"));
 
 app.use("/api/resume", resumeRoutes);
 app.use("/api/profile", profileRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));

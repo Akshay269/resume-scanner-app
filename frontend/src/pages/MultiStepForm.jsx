@@ -9,7 +9,11 @@ import StepSkills from "../components/StepSkills";
 import StepExperience from "../components/StepExperience";
 import StepEducation from "../components/StepEducation";
 import StepProjects from "../components/StepProjects";
-
+// console.log("StepPersonal:", StepPersonal);
+// console.log("StepSkills:", StepSkills);
+// console.log("StepExperience:", StepExperience);
+// console.log("StepEducation:", StepEducation);
+// console.log("StepProjects:", StepProjects);
 const steps = [
   StepPersonal,
   StepSkills,
@@ -48,7 +52,13 @@ export default function MultiStepForm() {
       const res = await api.get("/profile/draft");
       if (res.data) {
         setFormData(res.data.formData);
-        setStep(res.data.currentStep);
+        const step = Number(res.data.currentStep);
+        if (step >= 1 && step <= steps.length) {
+          setStep(step);
+        } else {
+          console.warn("Invalid step in draft, resetting to 1");
+          setStep(1);
+        }
 
         Object.entries(res.data.formData).forEach(([section, values]) => {
           Object.entries(values).forEach(([key, val]) => {
@@ -79,6 +89,9 @@ export default function MultiStepForm() {
 
     alert("Draft saved!");
   };
+
+  console.log("Rendering step:", CurrentStepComponent?.name);
+
   return (
     <div className="max-w-2xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-4">Complete Your Profile</h1>

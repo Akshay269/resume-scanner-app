@@ -3,11 +3,13 @@ import UploadResume from "./pages/UploadResume";
 import MultiStepForm from "./pages/MultiStepForm";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import DebugToken from "./components/temp";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
     <BrowserRouter>
-    <DebugToken />
+      <DebugToken />
+      <Navbar />
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
