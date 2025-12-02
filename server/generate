@@ -1,0 +1,9 @@
+import { createJwt } from "@clerk/backend";
+
+const token = createJwt({
+  secretKey: process.env.CLERK_SECRET_KEY,
+  userId: "user_12345",  
+  template: "default"
+});
+
+console.log(token);
