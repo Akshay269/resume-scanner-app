@@ -1,6 +1,19 @@
-export default function StepPersonal({ register }) {
+export default function StepPersonal({ register, onFileUpload }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+
+      {/* 🔥 File Upload Section */}
+      <div>
+        <label className="font-semibold">Upload Resume (PDF)</label>
+        <input
+          type="file"
+          accept="application/pdf"
+          className="w-full border p-2 rounded"
+          onChange={onFileUpload}
+        />
+      </div>
+
+      {/* Personal Fields */}
       <div>
         <label>Name</label>
         <input
