@@ -8,6 +8,13 @@ const experienceSchema = new mongoose.Schema({
   description: String
 });
 
+const personalSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phone: String,
+  summary: String
+});
+
 const educationSchema = new mongoose.Schema({
   institution: String,
   degree: String,
@@ -24,10 +31,7 @@ const projectSchema = new mongoose.Schema({
 const profileSchema = new mongoose.Schema({
   userId: String,
   formData: {
-    name: String,
-    email: String,
-    phone: String,
-    summary: String,
+    personal: personalSchema,
     skills: [String],
     experience: [experienceSchema],
     education: [educationSchema],

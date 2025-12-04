@@ -8,6 +8,7 @@ import expressWinston from "express-winston";
 
 import resumeRoutes from "./src/routes/resume.routes.js";
 import profileRoutes from "./src/routes/profile.routes.js";
+import jobsRoutes from "./src/routes/jobs.routes.js";
 import { globalLimiter } from "./src/middlewares/rateLimiter.simple.js";
 import { logger } from "./src/config/logger.js";
 import { errorHandler } from "./src/middlewares/errorHandler.js";
@@ -19,7 +20,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(globalLimiter);
+// app.use(globalLimiter);
 // app.use(morgan("combined"));
 
 // app.use(expressWinston.logger({
@@ -37,6 +38,7 @@ app.get("/", (req, res) => res.send("API Running"));
 
 app.use("/api/resume", resumeRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/jobs", jobsRoutes);
 
 app.use(errorHandler);
 

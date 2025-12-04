@@ -11,7 +11,7 @@ export const uploadResume = async (req, res) => {
     const buffer = req.file.buffer;
 
     // Step 1 — Parse PDF via Gemini Vision
-    console.log("Parsing resume using Gemini Vision...");
+    // console.log("Parsing resume using Gemini Vision...");
     const parsedData = await parseResumePDF(buffer);
 
     // Step 2 — Normalize

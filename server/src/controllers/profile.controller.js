@@ -23,6 +23,7 @@ export const saveDraft = async (req, res) => {
 export const getDraft = async (req, res) => {
   try {
     const profile = await Profile.findOne({ userId: req.user.id });
+    
     res.json(profile);
   } catch (err) {
     res.status(500).json({ error: err.message });

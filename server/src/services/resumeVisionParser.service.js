@@ -11,7 +11,7 @@ export async function parseResumePDF(buffer) {
   try {
     if (!genAI) {
       genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      console.log("api-key",process.env.GEMINI_API_KEY);
+      // console.log("api-key",process.env.GEMINI_API_KEY);
     }
 
     const model = genAI.getGenerativeModel({
